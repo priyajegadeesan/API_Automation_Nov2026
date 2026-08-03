@@ -1,0 +1,46 @@
+node_modules/
+dist/
+reports/
+logs/
+
+# Environment files (keep templates only)
+.env
+.env.local
+.env.*.local
+
+# Keep environment templates for reference
+# .env.example (committed)
+# .env.uat (can commit without real credentials)
+# .env.test (can commit without real credentials)
+# .env.prod (can commit without real credentials)
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build
+package-lock.json
+playwright-report/
+test-results/
+
+# Secrets (just in case)
+*secret*
+*credentials*
+*token*
+*.pem
+*.key
+
+# Forge
+.forge-commit-ready
+.forge/project-id
+.cursor/hooks.json
+.cursor/hooks/
+.cursor/rules/forge-workflow.mdc

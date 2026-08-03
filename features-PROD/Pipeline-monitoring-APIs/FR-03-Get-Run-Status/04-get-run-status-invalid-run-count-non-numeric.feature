@@ -1,0 +1,14 @@
+Feature: Get Run Status with Invalid Run Count (Non-numeric)
+  As an API consumer
+  I want to verify error handling for non-numeric run count
+
+  Background:
+    Given the API is available
+    And I am authenticated with valid credentials
+
+  @pipeline @run @status @negative @prod @get
+  Scenario: Get run status with non-numeric run count
+    When I send a GET request to "/api/v2/pipelines/61be284b4e719c002cd7ef6f/runs/abc"
+    Then the response status code should be 400
+    And the response should have property "status"
+    And the response should have property "metadata"

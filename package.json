@@ -1,0 +1,47 @@
+{
+  "name": "api-bdd-playwright",
+  "version": "1.1.0",
+  "description": "BDD Framework for API Automation using Playwright and Cucumber",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js",
+    "test:parallel": "cucumber-js --parallel 2",
+    "test:tags": "cucumber-js --tags",
+    "test:uat": "cross-env ENV=uat cucumber-js",
+    "test:test": "cross-env ENV=test cucumber-js",
+    "test:prod": "cross-env ENV=prod cucumber-js",
+    "test:uat:tags": "cross-env ENV=uat cucumber-js --tags",
+    "test:test:tags": "cross-env ENV=test cucumber-js --tags",
+    "test:prod:tags": "cross-env ENV=prod cucumber-js --tags",
+    "report:defect": "node generate_api_defect_report.js",
+    "report:comprehensive": "node generate_api_comprehensive_report.js",
+    "report:all": "npm run report:defect && npm run report:comprehensive",
+    "clean": "rimraf reports",
+    "clean:reports": "node delete_all_reports.js"
+  },
+  "keywords": [
+    "playwright",
+    "cucumber",
+    "bdd",
+    "api",
+    "automation"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@cucumber/cucumber": "^10.3.1",
+    "@playwright/test": "^1.42.1",
+    "@types/chai": "^5.2.3",
+    "@types/node": "^20.11.24",
+    "chai": "^4.4.1",
+    "cross-env": "^10.1.0",
+    "dotenv": "^16.4.5",
+    "multiple-cucumber-html-reporter": "^3.5.0",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "winston": "^3.11.0"
+  }
+}
