@@ -1,0 +1,289 @@
+[
+  {
+    "description": "  As an API consumer\n  I want to create a new user in the system\n  So that I can test user management functionality",
+    "elements": [
+      {
+        "description": "",
+        "id": "create-a-new-user;create-a-new-user-successfully",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Create a new user successfully",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 25236800
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "the API is available",
+            "match": {
+              "location": "src\\steps\\genericApiSteps.ts:11"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3706700
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "I am authenticated with valid credentials",
+            "match": {
+              "location": "src\\steps\\tasksV2Steps.ts:8"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 992099
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 12,
+            "name": "I send a POST request to \"/api/v2/usermanagement/user\" with user details",
+            "match": {
+              "location": "src\\steps\\genericApiSteps.ts:540"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2311593000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 13,
+            "name": "the response status code should be 200",
+            "match": {
+              "location": "src\\steps\\genericApiSteps.ts:340"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2813999
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "the response should be a valid JSON",
+            "match": {
+              "location": "src\\steps\\genericApiSteps.ts:530"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1335100
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 6800099
+            },
+            "embeddings": [
+              {
+                "data": "UmVzcG9uc2UgU3RhdHVzOiAyMDAKUmVzcG9uc2UgQm9keTogeyJtZXNzYWdlIjoiVXNlciBjcmVhdGlvbiBjb21wbGV0ZSIsInVzZXIiOnsiX2lkIjoiNmE3MDk1NTU3MzU2MTI0MzZmNmFlYjI5IiwiZmlyc3ROYW1lIjoiVGVzdGluZyIsImxhc3ROYW1lIjoiVXNlcnMiLCJlbWFpbCI6Im5vZGVhcGlhZG1pbjNhdWcyMDI2MTg0OTE1QG9wc2VyYS51cyIsInNzb1N5c3RlbSI6Im9rdGEiLCJhcHBsaWNhdGlvbnMiOltdLCJ0b29scyI6W10sImF0dHJpYnV0ZXMiOnsidGl0bGUiOiIiLCJjb21wYW55Ijoib3JnMTA0ZC1hY2MwIn0sImNvbmZpZ3VyYXRpb24iOnsiY2xvdWRQcm92aWRlciI6IkVLUyIsImNsb3VkUHJvdmlkZXJSZWdpb24iOiJ1cy1lYXN0LTIifSwiYWN0aXZlIjp0cnVlLCJ0ZW5hbnQiOiI2MWFiM2E2MDVmZWFlZTAwMTE4YzQwMjQiLCJhY2NvdW50Ijoib3JnMTA0ZC1hY2MwIiwiZG9tYWluIjoib3BzZXJhLXVzIiwib3JnYW5pemF0aW9uTmFtZSI6Im9wc2VyYS51cyIsInZhbGlkYXRlZEFjY291bnRzIjpbXSwiY3JlYXRlZEF0IjoiMjAyNi0wOC0wM1QxMzoxOToxNy45NDZaIiwidXBkYXRlZEF0IjoiMjAyNi0wOC0wM1QxMzoxOToxNy45NDZaIn19",
+                "mime_type": "text/plain"
+              }
+            ]
+          }
+        ],
+        "tags": [
+          {
+            "name": "@user",
+            "line": 10
+          },
+          {
+            "name": "@create",
+            "line": 10
+          },
+          {
+            "name": "@uat",
+            "line": 10
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "create-a-new-user",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Create a New User",
+    "tags": [],
+    "uri": "features-UAT\\User-Management\\create-a-new-user.feature"
+  },
+  {
+    "description": "  As an API consumer\n  I want to create and then delete a user from the system\n  So that I can test user lifecycle without affecting existing users",
+    "elements": [
+      {
+        "description": "",
+        "id": "delete-user;create-a-user-and-then-delete-it",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Create a user and then delete it",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 3829200
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "the API is available",
+            "match": {
+              "location": "src\\steps\\genericApiSteps.ts:11"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 530899
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 8,
+            "name": "I am authenticated with valid credentials",
+            "match": {
+              "location": "src\\steps\\tasksV2Steps.ts:8"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 437500
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 13,
+            "name": "I send a POST request to \"/api/v2/usermanagement/user\" with user details",
+            "match": {
+              "location": "src\\steps\\genericApiSteps.ts:540"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1539291900
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 14,
+            "name": "the response status code should be 200",
+            "match": {
+              "location": "src\\steps\\genericApiSteps.ts:340"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 761599
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 15,
+            "name": "the response should be a valid JSON",
+            "match": {
+              "location": "src\\steps\\genericApiSteps.ts:530"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 397000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 18,
+            "name": "I send a DELETE request to delete the created user",
+            "match": {
+              "location": "src\\steps\\genericApiSteps.ts:605"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 382703700
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 19,
+            "name": "the response status code should be 200",
+            "match": {
+              "location": "src\\steps\\genericApiSteps.ts:340"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 674600
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "the response should be a valid JSON",
+            "match": {
+              "location": "src\\steps\\genericApiSteps.ts:530"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 384799
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 2300400
+            },
+            "embeddings": [
+              {
+                "data": "UmVzcG9uc2UgU3RhdHVzOiAyMDAKUmVzcG9uc2UgQm9keTogeyJtZXNzYWdlIjoiVXNlciBkZWFjdGl2YXRpb24gY29tcGxldGVkOiBSZXZva2VkIFVzZXIifQ==",
+                "mime_type": "text/plain"
+              }
+            ]
+          }
+        ],
+        "tags": [
+          {
+            "name": "@user",
+            "line": 10
+          },
+          {
+            "name": "@delete",
+            "line": 10
+          },
+          {
+            "name": "@uat",
+            "line": 10
+          },
+          {
+            "name": "@cleanup",
+            "line": 10
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "delete-user",
+    "line": 1,
+    "keyword": "Feature",
+    "name": "Delete User",
+    "tags": [],
+    "uri": "features-UAT\\User-Management\\delete-user.feature"
+  }
+]

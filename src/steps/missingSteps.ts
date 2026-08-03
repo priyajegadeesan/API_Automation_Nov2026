@@ -892,25 +892,26 @@ When('I send a GET request to {string} with parameters:', async function (this: 
   }
 });
 
-When('I send a POST request to {string} with user details', async function (this: ICustomWorld, endpoint: string) {
-  try {
-    const timestamp = Date.now();
-    const userData = {
-      emailAddress: `NodeAPIAdminmsh-${timestamp}@opsera.us`,
-      firstName: 'Testing',
-      lastName: 'Users',
-      siteRole: 'administrator'
-    };
-    const response = await this.request.post(endpoint, { data: userData });
-    this.setResponse({ status: response.status() });
-    this.setResponseBody(await response.json().catch(() => ({})));
-    logger.info(`POST request to create user completed with status: ${response.status()}`);
-  } catch (error: any) {
-    this.setResponse({ status: error.status || 500 });
-    this.setResponseBody({});
-    logger.error(`POST request to create user failed: ${error.message}`);
-  }
-});
+// Duplicate step - moved to genericApiSteps.ts with user ID storage capability
+// When('I send a POST request to {string} with user details', async function (this: ICustomWorld, endpoint: string) {
+//   try {
+//     const timestamp = Date.now();
+//     const userData = {
+//       emailAddress: `NodeAPIAdminmsh-${timestamp}@opsera.us`,
+//       firstName: 'Testing',
+//       lastName: 'Users',
+//       siteRole: 'administrator'
+//     };
+//     const response = await this.request.post(endpoint, { data: userData });
+//     this.setResponse({ status: response.status() });
+//     this.setResponseBody(await response.json().catch(() => ({})));
+//     logger.info(`POST request to create user completed with status: ${response.status()}`);
+//   } catch (error: any) {
+//     this.setResponse({ status: error.status || 500 });
+//     this.setResponseBody({});
+//     logger.error(`POST request to create user failed: ${error.message}`);
+//   }
+// });
 
 When('I send a GET request to {string} with email search parameter', async function (this: ICustomWorld, endpoint: string) {
   try {

@@ -532,3 +532,111 @@ Then('the response should be a valid JSON', async function (this: ICustomWorld) 
   expect(typeof this.responseBody).not.to.equal('string');
   logger.info('Verified response is valid JSON');
 });
+
+// =====================================================
+// USER MANAGEMENT SPECIFIC STEPS
+// =====================================================
+
+When('I send a POST request to {string} with user details', async function (this: ICustomWorld, endpoint: string) {
+  try {
+    // Generate unique email with date format: NodeAPIAdmin3aug2026@opsera.us
+    const now = new Date();
+    const day = now.getDate();
+    const monthNames = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+    const month = monthNames[now.getMonth()];
+    const year = now.getFullYear();
+    const timeStamp = now.getHours().toString() + now.getMinutes().toString() + now.getSeconds().toString();
+    
+    const userData = {
+      emailAddress: `NodeAPIAdmin${day}${month}${year}${timeStamp}@opsera.us`,
+      firstName: 'Testing',
+      lastName: 'Users',
+      siteRole: 'administrator'
+    };
+    
+    logger.info(`Creating user with email: ${userData.emailAddress}`);
+    const response = await this.request.post(endpoint, { data: userData });
+    this.setResponse({ status: response.status() });
+    const responseBody = await response.json().catch(() => ({}));
+    this.setResponseBody(responseBody);
+    
+    // Store the created user ID for later use (e.g., in delete operations)
+    let userId = null;
+    
+    // Log the full response for debugging
+    logger.info(`📋 Full create user response: ${JSON.stringify(responseBody, null, 2)}`);
+    
+    // Try different possible locations for user ID in response
+    if (responseBody) {
+      logger.info(`🔍 Checking for user ID in response...`);
+      
+      if (responseBody._id) {
+        userId = responseBody._id;
+        logger.info(`✓ Found ID at responseBody._id: ${userId}`);
+      } else if (responseBody.id) {
+        userId = responseBody.id;
+        logger.info(`✓ Found ID at responseBody.id: ${userId}`);
+      } else if (responseBody.user && responseBody.user._id) {
+        userId = responseBody.user._id;
+        logger.info(`✓ Found ID at responseBody.user._id: ${userId}`);
+      } else if (responseBody.data && responseBody.data._id) {
+        userId = responseBody.data._id;
+        logger.info(`✓ Found ID at responseBody.data._id: ${userId}`);
+      }
+      
+      if (userId) {
+        this.testData.set('createdUserId', userId);
+        logger.info(`✅ Successfully stored user ID for deletion: ${userId}`);
+      } else {
+        logger.error(`❌ No user ID found in response!`);
+        logger.error(`Response keys: ${Object.keys(responseBody).join(', ')}`);
+        logger.error(`Response structure: ${JSON.stringify(responseBody, null, 2)}`);
+      }
+    }
+    
+    logger.info(`User creation completed with status: ${response.status()}`);
+  } catch (error: any) {
+    this.setResponse({ status: error.status || 500 });
+    this.setResponseBody({});
+    logger.error(`User creation failed: ${error.message}`);
+  }
+});
+
+When('I send a DELETE request to delete the created user', async function (this: ICustomWorld) {
+  try {
+    const userId = this.testData.get('createdUserId');
+    
+    logger.info(`🔍 Retrieved user ID from test data: ${userId}`);
+    
+    if (!userId) {
+      logger.error(`❌ No user ID found in test data!`);
+      throw new Error('No user ID found. Please create a user first.');
+    }
+    
+    const endpoint = `/api/v2/usermanagement/user/${userId}`;
+    logger.info(`🗑️ Attempting to delete user...`);
+    logger.info(`   User ID: ${userId}`);
+    logger.info(`   Endpoint: ${endpoint}`);
+    logger.info(`   Full URL: ${process.env.BASE_URL}${endpoint}`);
+    
+    const response = await this.request.delete(endpoint);
+    const responseBody = await response.json().catch(() => ({}));
+    
+    this.setResponse({ status: response.status() });
+    this.setResponseBody(responseBody);
+    
+    logger.info(`📋 Delete response status: ${response.status()}`);
+    logger.info(`📋 Delete response body: ${JSON.stringify(responseBody, null, 2)}`);
+    
+    if (response.status() === 200) {
+      this.testData.delete('createdUserId');
+      logger.info('✅ User deleted successfully, cleared ID from test data');
+    } else {
+      logger.error(`❌ Delete failed with status ${response.status()}`);
+    }
+  } catch (error: any) {
+    this.setResponse({ status: error.status || 500 });
+    this.setResponseBody({});
+    logger.error(`❌ User deletion failed with error: ${error.message}`);
+  }
+});
