@@ -8,7 +8,7 @@ Feature: UAT v2 Pipeline Status
 
   @pipeline @status @uat @post
   Scenario: Get pipeline execution status in UAT
-    When I send a POST request to "/v2/actions" with body:
+    When I send a POST request to "/api/v2/actions" with body:
       """
       {
         "action": "status",

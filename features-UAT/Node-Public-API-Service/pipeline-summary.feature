@@ -9,7 +9,7 @@
 
   @smoke @node-api @post @uat
   Scenario: Pipeline summary API call
-    When I send a POST request to "/v1/pipeline/summary" with body:
+    When I send a POST request to "/api/v1/pipeline/summary" with body:
       """
       {
         "pipelineId": "6a4e6c738647469b4a18f6b7"

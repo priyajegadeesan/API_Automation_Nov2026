@@ -1,28 +1,52 @@
 const fs = require('fs');
+const path = require('path');
 
-const reportPath = 'reports/cucumber-uat-report.json';
-const data = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+// Read the cucumber JSON report
+const reportPath = path.join(__dirname, 'reports', 'cucumber-uat-report.json');
+const cucumberData = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
 
-const failedFeatures = new Set();
+// Parse test results
+const failed = [];
+let totalTests = 0;
+let passedTests = 0;
 
-data.forEach(feature => {
+cucumberData.forEach(feature => {
   feature.elements.forEach(scenario => {
+    totalTests++;
     const hasFailed = scenario.steps.some(step => step.result && step.result.status === 'failed');
+    
     if (hasFailed) {
-      failedFeatures.add(feature.uri || feature.name);
+      failed.push({
+        feature: feature.name,
+        scenario: scenario.name,
+        file: feature.uri
+      });
+    } else {
+      passedTests++;
     }
   });
 });
 
-const sortedFailures = Array.from(failedFeatures).sort();
+console.log('\n========== TEST EXECUTION SUMMARY ==========\n');
+console.log(`Total Tests: ${totalTests}`);
+console.log(`Passed: ${passedTests}`);
+console.log(`Failed: ${failed.length}`);
+console.log(`Success Rate: ${((passedTests / totalTests) * 100).toFixed(2)}%`);
 
-const outputPath = 'reports/failed_features_uat.txt';
-const output = `Total Failing Feature Files: ${sortedFailures.length}\n\n${'='.repeat(80)}\n\n${sortedFailures.join('\n')}`;
+console.log('\n========== FAILED TESTS DETAILS ==========\n');
+failed.forEach((item, idx) => {
+  console.log(`${idx + 1}. ${item.file}`);
+  console.log(`   Feature: ${item.feature}`);
+  console.log(`   Scenario: ${item.scenario}\n`);
+});
 
-fs.writeFileSync(outputPath, output, 'utf8');
+const uniqueFiles = [...new Set(failed.map(f => f.file))];
+console.log(`\n========== UNIQUE FAILED FILES (${uniqueFiles.length}) ==========\n`);
+uniqueFiles.forEach((file, idx) => {
+  console.log(`${idx + 1}. ${file}`);
+});
 
-console.log(`\n✅ Failed features list saved to: ${outputPath}`);
-console.log(`\n📋 Total Failing Feature Files: ${sortedFailures.length}\n`);
-console.log('Failed Feature Files:');
-console.log('='.repeat(80));
-sortedFailures.forEach(file => console.log(file));
+// Save to text file
+const outputPath = path.join(__dirname, 'reports', 'failed_features_uat.txt');
+fs.writeFileSync(outputPath, uniqueFiles.join('\n'), 'utf8');
+console.log(`\n✅ Failed files list saved to: ${outputPath}`);
