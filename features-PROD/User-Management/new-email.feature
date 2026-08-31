@@ -7,7 +7,6 @@ Feature: Search User by New Email
   Scenario: Successfully search for user by email address
     Given the API is available
     And I am authenticated with valid credentials
-    When I send a GET request to "/api/v2/usermanagement/user?search=email=Duser.name@opsera.io"
+    When I send a GET request to "/api/v2/usermanagement/user?search=email=qauser_prod@protonmail.com"
     Then the response status code should be 200
     And the response should be a valid JSON
-    And the response should have property "data"

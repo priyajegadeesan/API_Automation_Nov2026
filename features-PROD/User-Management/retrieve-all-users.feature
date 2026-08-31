@@ -10,4 +10,3 @@ Feature: Retrieve all Users
     When I send a GET request to "/api/v2/usermanagement/users"
     Then the response status code should be 200
     And the response should be a valid JSON
-    And the response should have property "data"

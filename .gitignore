@@ -8,11 +8,16 @@ logs/
 .env.local
 .env.*.local
 
-# Keep environment templates for reference
-# .env.example (committed)
-# .env.uat (can commit without real credentials)
-# .env.test (can commit without real credentials)
-# .env.prod (can commit without real credentials)
+# SECURITY: Never commit actual environment files with real credentials
+.env.uat
+.env.prod
+.env.test
+
+# Keep only template files
+# .env.example (committed - no real credentials)
+# .env.uat.template (committed - placeholders only)
+# .env.prod.template (committed - placeholders only)
+# .env.test.template (committed - placeholders only)
 
 # Logs
 *.log
