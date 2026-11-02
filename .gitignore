@@ -3,53 +3,90 @@ dist/
 reports/
 logs/
 
-# Environment files (keep templates only)
+# ============================================
+# SECURITY: Environment Files
+# ============================================
+# NEVER commit files with real credentials!
+# Only .env.example should be committed
+
+# All .env files (except .example)
 .env
 .env.local
 .env.*.local
-
-# SECURITY: Never commit actual environment files with real credentials
 .env.uat
 .env.prod
 .env.test
+.env.development
+.env.staging
 
-# SECURITY: Never commit environment backup files
+# Environment backups
 .env*.backup
-.env.uat.backup
-.env.prod.backup
-.env.test.backup
+*.env.backup
 
-# Keep only template files
-# .env.example (committed - no real credentials)
-# .env.uat.template (committed - placeholders only)
-# .env.prod.template (committed - placeholders only)
-# .env.test.template (committed - placeholders only)
+# Keep only these template files (committed):
+# - .env.example (placeholder values only)
 
+# ============================================
+# SECURITY: Secrets & Credentials
+# ============================================
+*secret*
+*credentials*
+*password*
+*token.txt
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+
+# ============================================
+# Build & Dependencies
+# ============================================
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ============================================
+# Test Results & Reports
+# ============================================
+playwright-report/
+test-results/
+coverage/
+.nyc_output/
+
+# ============================================
 # Logs
+# ============================================
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
-# OS
+# ============================================
+# OS Files
+# ============================================
 .DS_Store
+Thumbs.db
+desktop.ini
 
-# IDE
+# ============================================
+# IDE & Editor Files
+# ============================================
 .idea/
 .vscode/
 *.swp
 *.swo
+*.swn
+*~
+.project
+.classpath
+.settings/
 
-# Build
-package-lock.json
-playwright-report/
-test-results/
-
-# Secrets (just in case)
-*secret*
-*credentials*
-*token*
-*.pem
-*.key
-
-# Forge
+# ============================================
+# Forge & Cursor
+# ============================================
 .forge-commit-ready
 .forge/project-id
 .cursor/hooks.json
