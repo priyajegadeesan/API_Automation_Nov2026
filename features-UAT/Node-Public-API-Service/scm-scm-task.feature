@@ -1,13 +1,13 @@
-﻿Feature: SCM-SCM Task
+Feature: SCM-SCM Task
   As an API consumer
   I want to test the SCM-SCM Task endpoint
   So that I can verify the API functionality
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @node-api @post @uat
+  @UAT-USER @UAT-USER @smoke @UAT-USER @node-api @post @UAT-USER @uat
   Scenario: SCM-SCM Task API call
     When I send a POST request to "/api/v2/tasks/scmtoscm/csvupload?sourceGitToolId=67a5de17fe54ef0012d01e2a&sourceScmType=github&targetGitToolId=67a5de17fe54ef0012d01e2a&targetScmType=github&taskId=691ff1e8a32952ffad891465&skipFailed=false" with CSV data:
       """

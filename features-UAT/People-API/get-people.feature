@@ -5,9 +5,9 @@ Feature: Get People
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @people @get @prod
+  @UAT-USER @smoke @people @UAT-USER @get @UAT-USER @prod
   Scenario: Get all people successfully
     When I send a GET request to "/api/v2/data/people"
     Then the response status code should be 200

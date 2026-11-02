@@ -9,11 +9,11 @@ Feature: GET Task Status
 
   @smoke @tasks @prod @status
   Scenario: Get task status by ID
-    Given I have a valid task ID "6838419bb017a1f73f62840a"
+    Given I have a valid task ID "67c2ae58082f750012c29036"
     When I send a POST request to "/api/v2/tasks/status" with body:
       """
       {
-        "id": "6838419bb017a1f73f62840a"
+        "id": "67c2ae58082f750012c29036"
       }
       """
     Then the response status code should be 200

@@ -4,9 +4,9 @@ Feature: UAT v2 Create Jmeter Pipeline
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @pipeline @create @jmeter @uat
+  @UAT-USER @pipeline @create @UAT-USER @jmeter @UAT-USER @uat
   Scenario: Create a new Jmeter pipeline in UAT
     When I send a POST request to "/api/v2/pipelines" with Jmeter configuration
     Then the response status code should be 200

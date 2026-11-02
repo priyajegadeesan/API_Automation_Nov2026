@@ -1,13 +1,13 @@
-﻿Feature: ProdPipeline create build step
+Feature: ProdPipeline create build step
   As an API consumer
   I want to test the ProdPipeline create build step endpoint
   So that I can verify the API functionality
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @node-api @post @uat
+  @UAT-USER @UAT-USER @smoke @UAT-USER @node-api @post @UAT-USER @uat
   Scenario: ProdPipeline create build step API call
     When I send a POST request to "/api/v1/pipeline/create" with body:
       """

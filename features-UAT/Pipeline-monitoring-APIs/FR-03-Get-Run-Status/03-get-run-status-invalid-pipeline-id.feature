@@ -4,9 +4,9 @@ Feature: Get Run Status with Invalid Pipeline ID
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @pipeline @run @status @negative @prod @get
+  @UAT-USER @pipeline @run @status @UAT-USER @negative @UAT-USER @prod @UAT-USER @get
   Scenario: Get run status with invalid pipeline ID
     When I send a GET request to "/api/v2/pipelines/not-valid/runs/1"
     Then the response status code should be 400

@@ -4,9 +4,9 @@ Feature: Get Run Status with Invalid Run Count (Non-numeric)
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @pipeline @run @status @negative @prod @get
+  @UAT-USER @pipeline @run @status @UAT-USER @negative @UAT-USER @prod @UAT-USER @get
   Scenario: Get run status with non-numeric run count
     When I send a GET request to "/api/v2/pipelines/61be284b4e719c002cd7ef6f/runs/abc"
     Then the response status code should be 400

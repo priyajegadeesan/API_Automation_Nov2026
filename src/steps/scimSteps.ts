@@ -30,6 +30,7 @@ Given('I am authenticated with valid SCIM credentials', async function (this: IC
       'Authorization': `Bearer ${config.scimBearerToken}`,
     },
     timeout: config.apiTimeout,
+    ignoreHTTPSErrors: true, // Ignore SSL certificate errors for testing
   });
   
   logger.info('SCIM authentication configured with SCIM bearer token (without X-Customer-ID)');
@@ -51,6 +52,7 @@ Given('I am authenticated with valid SCIM PROD credentials', async function (thi
       ...(config.customerID && { 'X-Customer-ID': config.customerID }),
     },
     timeout: config.apiTimeout,
+    ignoreHTTPSErrors: true, // Ignore SSL certificate errors for testing
   });
   
   logger.info('SCIM PROD authentication configured with SCIM bearer token');

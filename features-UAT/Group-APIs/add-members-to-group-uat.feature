@@ -7,9 +7,9 @@ Feature: Add Members To Group UAT
     Given the API is available
     And I am authenticated with valid credentials
 
-  @groups @members @add @uat @post
+  @UAT-USER @groups @members @add @UAT-USER @uat @UAT-USER @post
   Scenario: Add members to UAT group successfully
-    When I send a POST request to "/api/v2/usermanagement/group/test/members" with body:
+    When I send a POST request to "/api/v2/usermanagement/group/qatest-sup1370-rbac/members" with body:
       """
       [
         "keerthiga@opsera.us",

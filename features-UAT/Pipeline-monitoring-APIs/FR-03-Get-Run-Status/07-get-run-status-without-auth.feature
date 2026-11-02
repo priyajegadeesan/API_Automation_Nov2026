@@ -5,7 +5,7 @@ Feature: Get Run Status without Authentication
   Background:
     Given the API is available
 
-  @pipeline @run @status @negative @auth @prod @get
+  @UAT-USER @pipeline @run @status @UAT-USER @negative @auth @UAT-USER @prod @UAT-USER @get
   Scenario: Get run status without authentication expects 500 error
     When I send a GET request to "/api/v2/pipelines/6463a424a761d000124d12bf/runs/1" without authentication
     Then the response status code should be 500

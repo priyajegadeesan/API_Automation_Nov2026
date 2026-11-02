@@ -5,9 +5,9 @@ Feature: Get All Tasks v2 UAT
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @tasks @get @uat
+  @UAT-USER @smoke @tasks @UAT-USER @get @UAT-USER @uat
   Scenario: Get all UAT tasks successfully
     When I send a GET request to "/api/v2/tasks"
     Then the response status code should be 200

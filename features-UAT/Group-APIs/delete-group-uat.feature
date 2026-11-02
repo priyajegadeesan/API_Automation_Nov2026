@@ -5,9 +5,9 @@ Feature: Delete Group UAT
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @groups @delete @uat
+  @UAT-USER @groups @UAT-USER @delete @UAT-USER @uat
   Scenario: Create and delete a group successfully
     # First create a group to delete
     When I send a POST request to "/api/v2/usermanagement/group" with body:

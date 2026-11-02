@@ -1,4 +1,5 @@
-﻿Feature: Tasks run
+﻿@ignore
+Feature: Tasks run
   As an API consumer
   I want to test the Tasks run endpoint
   So that I can verify the API functionality

@@ -9,7 +9,7 @@ Feature: SCIM Get User By ID
 
   @smoke @scim @users @get @uat
   Scenario: Get SCIM user by ID
-    When I send a GET request to "/api/v2/scim/v2/users/69aab692b086af128ca8e1ce"
+    When I send a GET request to "/api/v2/scim/v2/users/6a998e9f36dbe98a635ab25b"
     Then the response status code should be 200
     And the response should have property "schemas"
     And the response should have property "id"

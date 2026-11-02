@@ -4,9 +4,9 @@ Feature: List Pipelines with Custom Pagination
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @pipeline @list @pagination @prod
+  @UAT-USER @pipeline @list @UAT-USER @pagination @UAT-USER @prod
   Scenario: List pipelines with custom pagination parameters
     When I send a GET request to "/api/v2/pipelines" with custom pagination
     Then the response status code should be 200

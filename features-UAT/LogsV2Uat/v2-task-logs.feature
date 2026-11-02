@@ -6,7 +6,7 @@ Feature: v2 Task Logs
 
   Scenario: Successfully retrieve task logs with task ID
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
     When I send a POST request to "/api/v2/logs/task" with body:
       """
       {

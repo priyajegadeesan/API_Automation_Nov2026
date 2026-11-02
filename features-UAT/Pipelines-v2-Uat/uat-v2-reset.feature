@@ -4,9 +4,9 @@ Feature: UAT v2 Reset Pipeline
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @pipeline @reset @uat
+  @UAT-USER @pipeline @UAT-USER @reset @UAT-USER @uat
   Scenario: Reset a pipeline in UAT
     When I send a POST request to "/api/v2/actions" with reset action
     Then the response status code should be 200

@@ -5,9 +5,9 @@ Feature: Get TaskByName-Nolookup
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @node-api @post @uat
+  @UAT-USER @UAT-USER @smoke @UAT-USER @node-api @post @UAT-USER @uat
   Scenario: Get TaskByName-Nolookup API call
     When I send a POST request to "/api/v2/task" with body:
       """

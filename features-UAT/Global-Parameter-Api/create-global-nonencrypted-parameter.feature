@@ -5,9 +5,9 @@ Feature: Create Global NonEncrypted Parameter
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @parameters @create @nonencrypted @uat
+  @UAT-USER @smoke @parameters @create @UAT-USER @nonencrypted @UAT-USER @uat
   Scenario: Create non-encrypted parameter successfully
     When I send a POST request to "/api/v2/global-parameters/create" with body:
       """

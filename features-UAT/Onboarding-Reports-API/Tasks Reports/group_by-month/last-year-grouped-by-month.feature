@@ -1,4 +1,4 @@
-@uat @onboarding-reports @get
+@UAT-USER @uat @onboarding-reports @get
 Feature: Last year- grouped by month
   As an API user
   I want to retrieve last year tasks grouped by month
@@ -6,7 +6,7 @@ Feature: Last year- grouped by month
 
   Scenario: Last year- grouped by month
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
     When I send a GET request to "/api/v2/reports/tasks/created?period=last_365days&group_by=month"
     Then the response status code should be 200
     And the response should be a valid JSON

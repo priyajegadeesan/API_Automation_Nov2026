@@ -5,9 +5,9 @@ Feature: Duplicate Global nonencrypted Parameter
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @parameters @create @duplicate @uat
+  @UAT-USER @smoke @parameters @create @UAT-USER @duplicate @UAT-USER @uat
   Scenario: Create duplicate non-encrypted parameter
     When I send a POST request to "/api/v2/global-parameters/create" with body:
       """

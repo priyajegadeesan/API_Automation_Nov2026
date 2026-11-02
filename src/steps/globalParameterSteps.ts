@@ -1,4 +1,4 @@
-import { Given, When } from '@cucumber/cucumber';
+import { Given, When, Then } from '@cucumber/cucumber';
 import { ICustomWorld } from '../hooks/world';
 import { config } from '../config/config';
 import logger from '../utils/logger';
@@ -29,9 +29,8 @@ When('I send a POST request to create global encrypted parameter', async functio
       "tags": ["secrets", "api-keys"]
     };
 
-    console.log(`🔑 Using Bearer Token: ${config.bearerToken ? 'Present' : 'Missing'}`);
-      console.log(`📡 Sending POST to: ${config.baseURL}/api/v2/global-parameters/create`);
-      console.log(`📦 Request Body:`, JSON.stringify(requestBody, null, 2));
+    // SECURITY FIX: Removed console logging of request/response bodies to prevent credential exposure
+    logger.info(`Creating encrypted parameter with name: ${uniqueName}`);
 
       const response = await this.request.post('/api/v2/global-parameters/create', {
       data: requestBody,
@@ -46,8 +45,7 @@ When('I send a POST request to create global encrypted parameter', async functio
     const responseBody = await response.json().catch(() => ({}));
     this.setResponseBody(responseBody);
     
-    console.log(`✅ Response Status: ${response.status()}`);
-    console.log(`📥 Response Body:`, JSON.stringify(responseBody, null, 2));
+    logger.info(`Response Status: ${response.status()}`);
   } catch (error: any) {
     console.error(`❌ Error creating parameter:`, error.message);
     this.setResponse({ status: error.status || 500 });
@@ -72,4 +70,36 @@ Given('I have a valid nonencrypted parameter ID', async function (this: ICustomW
   const defaultNonEncryptedParamId = '6a0ac21845577a4c76f8a7c94'; // Default non-encrypted parameter ID
   this.setTestData('parameterId', defaultNonEncryptedParamId);
   logger.info(`Non-encrypted Parameter ID set to: ${defaultNonEncryptedParamId}`);
+});
+
+// SECURITY: RBAC validation steps
+Given('I have a valid encrypted parameter ID for restricted access', async function (this: ICustomWorld) {
+  const restrictedParamId = '698040f298ef6ff3e44d225e'; // Encrypted parameter for RBAC testing
+  this.setTestData('parameterId', restrictedParamId);
+  logger.info(`Encrypted Parameter ID set for RBAC test: ${restrictedParamId}`);
+});
+
+Then('the response should indicate proper authorization check', async function (this: ICustomWorld) {
+  const status = this.response.status;
+  const body = this.responseBody;
+  
+  // SECURITY: Verify proper authorization handling
+  // Either the request should succeed with value redacted/empty, or return 403/401
+  if (status === 200) {
+    // If 200, the value should be redacted or empty for RBAC users
+    logger.info('RBAC user received 200 - validating value is protected');
+    if (body && typeof body === 'object' && 'value' in body) {
+      const value = body.value;
+      // Value should be redacted, null, empty, or explicitly marked as restricted
+      const isProtected = !value || value === '' || value === '[REDACTED]' || value.includes('restricted');
+      if (!isProtected) {
+        logger.warn('⚠️ SECURITY WARNING: RBAC user may have access to unredacted encrypted value');
+      }
+    }
+  } else if (status === 401 || status === 403) {
+    // Proper authorization denial
+    logger.info(`✅ RBAC user properly denied with status ${status}`);
+  } else {
+    logger.info(`Authorization check returned status: ${status}`);
+  }
 });

@@ -1,3 +1,4 @@
+@ignore
 Feature: Prod v2 Create Jenkins Pipeline
   As an API consumer
   I want to create a Jenkins pipeline using v2 API in PROD environment

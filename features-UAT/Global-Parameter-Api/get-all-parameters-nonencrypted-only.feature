@@ -5,9 +5,9 @@ Feature: Get All Parameters (nonencrypted only)
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @parameters @get @nonencrypted @uat
+  @UAT-USER @smoke @parameters @get @UAT-USER @nonencrypted @UAT-USER @uat
   Scenario: Get all non-encrypted parameters successfully
     When I send a GET request to "/api/v2/global-parameters/?encrypted=false"
     Then the response status code should be 200

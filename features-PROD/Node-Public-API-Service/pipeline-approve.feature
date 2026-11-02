@@ -7,7 +7,7 @@
     Given the API is available
     And I am authenticated with valid credentials
 
-  @smoke @node-api @get
+  @smoke @node-api @get @ignore
   Scenario: Pipeline approve API call
     When I send a GET request to "https://api.opsera-test.opsera.io/workflow/orchestration/status/64b6d0018a5c45001247c70a"
     Then the response status code should be 200

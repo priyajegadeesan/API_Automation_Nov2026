@@ -5,9 +5,9 @@ Feature: Create A New Person
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @people @create @uat
+  @UAT-USER @smoke @people @UAT-USER @create @UAT-USER @uat
   Scenario: Create a new person successfully
     When I send a POST request to "/api/v2/data/people" with body:
       """

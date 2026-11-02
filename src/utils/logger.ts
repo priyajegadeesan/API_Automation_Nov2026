@@ -17,13 +17,22 @@ const logger = winston.createLogger({
   ),
   defaultMeta: { service: 'api-automation' },
   transports: [
+    // Error logs with rotation (max 10MB per file, keep 3 files)
     new winston.transports.File({
       filename: path.join(logsDir, 'error.log'),
       level: 'error',
+      maxsize: 10485760, // 10MB
+      maxFiles: 3,
+      tailable: true
     }),
+    // Combined logs with rotation (max 20MB per file, keep 3 files)
     new winston.transports.File({
       filename: path.join(logsDir, 'combined.log'),
+      maxsize: 20971520, // 20MB
+      maxFiles: 3,
+      tailable: true
     }),
+    // Console output for real-time monitoring
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.colorize(),

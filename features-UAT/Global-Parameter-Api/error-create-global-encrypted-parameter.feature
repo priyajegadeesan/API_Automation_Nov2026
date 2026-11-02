@@ -5,9 +5,9 @@ Feature: Error - Create Global encrypted Parameter
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @parameters @create @error @encrypted @uat
+  @UAT-USER @smoke @parameters @create @UAT-USER @error @UAT-USER @encrypted @UAT-USER @uat
   Scenario: Create encrypted parameter with invalid data
     When I send a POST request to "/api/v2/global-parameters/create" with body:
       """

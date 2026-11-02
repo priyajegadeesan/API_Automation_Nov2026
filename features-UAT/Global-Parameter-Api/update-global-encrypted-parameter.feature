@@ -5,9 +5,9 @@ Feature: Update Global encrypted Parameter
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @parameters @update @encrypted @uat @post
+  @UAT-USER @smoke @parameters @update @UAT-USER @encrypted @UAT-USER @uat @UAT-USER @post
   Scenario: Update encrypted parameter successfully
     When I send a POST request to "/api/v2/global-parameters/61fb78de8a74ad0012e5e554/update" with body:
       """

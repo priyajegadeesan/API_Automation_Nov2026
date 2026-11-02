@@ -5,7 +5,7 @@ Feature: List Pipelines without Authentication
   Background:
     Given the API is available
 
-  @pipeline @list @negative @auth @uat
+  @UAT-USER @pipeline @list @negative @UAT-USER @auth @UAT-USER @uat
   Scenario: List pipelines without authentication expects error
     When I send a GET request to "/api/v2/pipelines" without authentication
     Then the response status code should be 500

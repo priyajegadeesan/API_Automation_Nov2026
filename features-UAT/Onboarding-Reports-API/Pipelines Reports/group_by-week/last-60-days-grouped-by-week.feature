@@ -1,4 +1,4 @@
-@uat @onboarding-reports @get
+@UAT-USER @uat @onboarding-reports @get
 Feature: Last 60 days- grouped by week
   As an API user
   I want to retrieve last 60 days pipelines grouped by week
@@ -6,7 +6,7 @@ Feature: Last 60 days- grouped by week
 
   Scenario: Last 60 days- grouped by week
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
     When I send a GET request to "/api/v2/reports/pipelines/created?period=last_60days&group_by=week"
     Then the response status code should be 200
     And the response should be a valid JSON

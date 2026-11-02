@@ -4,10 +4,10 @@ Feature: Search User by ID
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @user @search @uat @get
+  @UAT-USER @user @search @UAT-USER @uat @UAT-USER @get
   Scenario: Search user by ID successfully
-    When I send a GET request to "/api/v2/usermanagement/users?_id=69a7c9e938e63d6398332743"
+    When I send a GET request to "/api/v2/usermanagement/users?id=6548d78415c5da00166ae67e"
     Then the response status code should be 200
     And the response should be a valid JSON

@@ -4,9 +4,9 @@ Feature: Search User with ID in Link
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @user @search @uat
+  @UAT-USER @user @UAT-USER @search @UAT-USER @uat
   Scenario: Search for user with ID in URL path
     When I send a GET request to "/api/v2/usermanagement/user/69a7c9e938e63d6398332743"
     Then the response status code should be 200

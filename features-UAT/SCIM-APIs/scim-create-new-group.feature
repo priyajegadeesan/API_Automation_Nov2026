@@ -7,7 +7,7 @@ Feature: SCIM Create New Group
     Given the API is available
     And I am authenticated with valid SCIM credentials
 
-  @smoke @scim @groups @create @uat @post
+  @UAT-USER @smoke @scim @groups @UAT-USER @create @UAT-USER @uat @UAT-USER @post
   Scenario: Create new SCIM group successfully
     When I send a POST request to "/api/v2/scim/v2/groups" with body:
       """

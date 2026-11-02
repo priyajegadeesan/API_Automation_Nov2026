@@ -5,9 +5,9 @@ Feature: Get Task By ID v2 UAT
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @tasks @get @lookup @uat @post
+  @UAT-USER @smoke @tasks @get @UAT-USER @lookup @UAT-USER @uat @UAT-USER @post
   Scenario: Get task by ID with lookup
     When I send a POST request to "/api/v2/tasks/lookup" with body:
       """

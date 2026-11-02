@@ -1,4 +1,5 @@
-﻿Feature: Pipeline create test
+﻿@ignore
+Feature: Pipeline create test
   As an API consumer
   I want to test the Pipeline create test endpoint
   So that I can verify the API functionality

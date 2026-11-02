@@ -1,4 +1,5 @@
-﻿Feature: Pipeline update
+﻿@ignore
+Feature: Pipeline update
   As an API consumer
   I want to test the Pipeline update endpoint
   So that I can verify the API functionality

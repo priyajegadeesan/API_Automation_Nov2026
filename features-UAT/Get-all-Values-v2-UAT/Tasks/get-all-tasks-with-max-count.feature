@@ -1,4 +1,4 @@
-@prod @get-all-values @get
+@UAT-USER @prod @get-all-values @get
 Feature: Get all tasks with max count
   As an API user
   I want to retrieve tasks with maximum count limit
@@ -6,7 +6,7 @@ Feature: Get all tasks with max count
 
   Scenario: Get all tasks with max count
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
     When I send a GET request to "/api/v2/search?t=task&count=2000"
     Then the response status code should be 200
     And the response should be a valid JSON

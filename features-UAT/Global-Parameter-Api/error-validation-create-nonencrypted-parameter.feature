@@ -5,9 +5,9 @@ Feature: Error validation - Create Global nonencrypted Parameter
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @parameters @create @error @validation @uat
+  @UAT-USER @smoke @parameters @create @UAT-USER @error @UAT-USER @validation @UAT-USER @uat
   Scenario: Create non-encrypted parameter with missing required fields
     When I send a POST request to "/api/v2/global-parameters/create" with body:
       """

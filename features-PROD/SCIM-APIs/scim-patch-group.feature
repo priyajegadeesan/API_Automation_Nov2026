@@ -9,7 +9,7 @@ Feature: SCIM Patch Group
 
   @scim @groups @patch @uat
   Scenario: Patch SCIM group with member operations
-    When I send a PATCH request to "/api/v2/scim/v2/groups/RegTest-5feb2026" with body:
+    When I send a PATCH request to "/api/v2/scim/v2/groups/scim-group-prod" with body:
       """
       {
         "schemas": [

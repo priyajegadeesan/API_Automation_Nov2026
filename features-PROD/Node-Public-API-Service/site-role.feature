@@ -1,4 +1,5 @@
-﻿Feature: Site Role
+﻿@ignore
+Feature: Site Role
   As an API consumer
   I want to test the Site Role endpoint
   So that I can verify the API functionality

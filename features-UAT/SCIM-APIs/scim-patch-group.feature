@@ -7,7 +7,7 @@ Feature: SCIM Patch Group
     Given the API is available
     And I am authenticated with valid SCIM credentials
 
-  @scim @groups @patch @uat
+  @UAT-USER @scim @groups @UAT-USER @patch @UAT-USER @uat
   Scenario: Patch SCIM group with member operations
     When I send a PATCH request to "/api/v2/scim/v2/groups/RegTest-5feb2026" with body:
       """

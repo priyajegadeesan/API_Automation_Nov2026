@@ -5,9 +5,9 @@ Feature: Get Members From Group UAT
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @groups @members @get @uat
+  @UAT-USER @groups @members @UAT-USER @get @UAT-USER @uat
   Scenario: Get group members successfully in UAT
     When I send a GET request to "/api/v2/usermanagement/group/pipelineadmins/memberships"
     Then the response status code should be 200

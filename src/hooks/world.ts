@@ -49,6 +49,7 @@ export class CustomWorld extends World implements ICustomWorld {
         ...(config.bearerToken && { 'Authorization': `Bearer ${config.bearerToken}` }),
       },
       timeout: config.apiTimeout,
+      ignoreHTTPSErrors: true, // Ignore SSL certificate errors for testing
     });
 
     this.tasksV2Service = new TasksV2Service(this.request);

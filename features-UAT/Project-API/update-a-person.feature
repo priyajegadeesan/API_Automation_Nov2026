@@ -4,9 +4,9 @@ Feature: Update a Person
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @people @update @uat
+  @UAT-USER @people @UAT-USER @update @UAT-USER @uat
   Scenario: Update a person successfully
     When I send a POST request to "/api/v2/data/people" with body:
       """

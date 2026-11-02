@@ -7,9 +7,9 @@ Feature: Patch Members To Group UAT
     Given the API is available
     And I am authenticated with valid credentials
 
-  @groups @members @patch @uat
+  @UAT-USER @groups @members @UAT-USER @patch @UAT-USER @uat
   Scenario: Patch group members successfully
-    When I send a PATCH request to "/api/v2/usermanagement/group/test/members" with body:
+    When I send a PATCH request to "/api/v2/usermanagement/group/qatest-sup1370-rbac/members" with body:
       """
       [
         "qauser_uat@opsera.us",

@@ -18,6 +18,7 @@ export const config = {
   authToken: process.env.AUTH_TOKEN || '',
   bearerToken: process.env.BEARER_TOKEN || '',
   scimBearerToken: process.env.SCIM_BEARER_TOKEN || '',
+  rbacUserToken: process.env.RBAC_USER_TOKEN || '',
   parallelWorkers: parseInt(process.env.PARALLEL_WORKERS || '2'),
   retries: envConfig.retries,
 };

@@ -5,9 +5,9 @@ Feature: Create a New User
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @user @create @uat
+  @UAT-USER @user @UAT-USER @create @UAT-USER @uat
   Scenario: Create a new user successfully
     When I send a POST request to "/api/v2/usermanagement/user" with user details
     Then the response status code should be 200

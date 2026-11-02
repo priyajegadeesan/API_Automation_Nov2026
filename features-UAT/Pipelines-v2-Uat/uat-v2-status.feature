@@ -4,9 +4,9 @@ Feature: UAT v2 Pipeline Status
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @pipeline @status @uat @post
+  @UAT-USER @pipeline @status @UAT-USER @uat @UAT-USER @post
   Scenario: Get pipeline execution status in UAT
     When I send a POST request to "/api/v2/actions" with body:
       """

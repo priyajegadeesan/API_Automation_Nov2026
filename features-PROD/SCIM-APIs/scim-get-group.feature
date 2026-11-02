@@ -9,7 +9,7 @@ Feature: SCIM Get Group
 
   @smoke @scim @groups @get @uat
   Scenario: Get SCIM group by ID
-    When I send a GET request to "/api/v2/scim/v2/groups/6a18721a4557a4c76f9452ce"
+    When I send a GET request to "/api/v2/scim/v2/groups/697354d91ac25f58b399f423"
     Then the response status code should be 200
     And the response should have property "schemas"
     And the response should have property "id"

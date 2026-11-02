@@ -5,9 +5,9 @@ Feature: Update A Person
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @people @update @prod @put
+  @UAT-USER @people @update @UAT-USER @prod @UAT-USER @put
   Scenario: Update person successfully
     When I send a PUT request to "/api/v2/data/people/Testingpeoplecreate1@protonmail.com" with body:
       """

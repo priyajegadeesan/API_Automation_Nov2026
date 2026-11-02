@@ -4,6 +4,9 @@ import { ICustomWorld } from '../hooks/world';
 import { DataTable } from '@cucumber/cucumber';
 import logger from '../utils/logger';
 
+// Module-level shared state for cross-scenario data (persists across scenario instances)
+const sharedState: Record<string, any> = {};
+
 // =====================================================
 // GROUP API STEPS
 // =====================================================
@@ -100,6 +103,154 @@ Then('each member should have user details', async function (this: ICustomWorld)
   logger.info('Verified member details');
 });
 
+// =====================================================
+// PIPELINE DYNAMIC CREATE & DELETE STEPS
+// =====================================================
+
+// Store the pipeline ID from the create response into shared module-level state
+// (CustomWorld is re-created per scenario so testData cannot be used cross-scenario)
+Then('I store the created pipeline ID', async function (this: ICustomWorld) {
+  const pipelineId = this.responseBody?.data?.pipelineId;
+  expect(pipelineId, 'Expected pipelineId in response data').to.not.be.undefined;
+  sharedState['createdPipelineId'] = pipelineId;
+  logger.info(`Stored created pipeline ID for deletion: ${pipelineId}`);
+});
+
+// Create N pipelines consecutively named e.g. "Bulk delete-1" to "Bulk delete-10"
+When('I create {int} pipelines with base name {string}', async function (this: ICustomWorld, count: number, baseName: string) {
+  sharedState['bulkPipelineIds'] = [];
+
+  for (let i = 1; i <= count; i++) {
+    const pipelineName = `${baseName}-${i}`;
+    const pipelineBody = {
+      name: pipelineName,
+      description: `Pipeline ${i} created for bulk delete testing`,
+      workflow: {
+        plan: [
+          {
+            _id: '653a85ef6ce89a00123f63d8',
+            name: 'Jmeter XML',
+            tool: {
+              tool_identifier: 'jmeter',
+              threshold: { type: '', value: '' },
+              configuration: {
+                buildType: 'gradle',
+                defaultBranch: 'master',
+                dockerName: '',
+                dockerTagName: '',
+                gitBranch: 'master',
+                gitRepository: 'Testing-example',
+                gitToolId: '621634fe2d193d0011f0ace2',
+                gitUrl: 'https://github.com/purusothamanns/Testing-example',
+                gitUserName: 'purushothaman@opsera.io',
+                jmeterFileName: 'jmeter-jmx-file/Sample-plan.jmx',
+                projectId: 'purusothamanns/Testing-example',
+                repoId: 'purusothamanns/Testing-example',
+                service: 'github',
+                sshUrl: 'git@github.com:purusothamanns/Testing-example.git',
+                type: 'xml',
+                workspace: '',
+                workspaceDeleteFlag: false
+              }
+            },
+            type: { '0': 'performance-test' },
+            orchestration_type: 'standard',
+            active: true
+          }
+        ]
+      }
+    };
+
+    try {
+      const response = await this.request.post('/api/v2/pipelines', { data: pipelineBody });
+      const body = await response.json().catch(() => ({}));
+      const pipelineId = body?.data?.pipelineId;
+
+      if (response.status() === 200 && pipelineId) {
+        sharedState['bulkPipelineIds'].push(pipelineId);
+        logger.info(`✅ Created pipeline ${i}/${count}: "${pipelineName}" → ID: ${pipelineId}`);
+      } else {
+        logger.error(`❌ Failed to create pipeline ${i}/${count}: "${pipelineName}" → Status: ${response.status()}`);
+        throw new Error(`Failed to create pipeline "${pipelineName}" — status ${response.status()}`);
+      }
+    } catch (error: any) {
+      logger.error(`Error creating pipeline "${pipelineName}": ${error.message}`);
+      throw error;
+    }
+  }
+
+  logger.info(`✅ All ${count} pipelines created. IDs: ${sharedState['bulkPipelineIds'].join(', ')}`);
+});
+
+// Validate that N pipeline IDs are stored and ready for bulk deletion
+Then('{int} pipeline IDs should be stored for bulk deletion', async function (this: ICustomWorld, expectedCount: number) {
+  const ids: string[] = sharedState['bulkPipelineIds'] || [];
+  expect(ids.length, `Expected ${expectedCount} pipeline IDs stored but found ${ids.length}`).to.equal(expectedCount);
+  logger.info(`✅ Verified ${ids.length} pipeline IDs stored: ${ids.join(', ')}`);
+});
+
+// Store the second pipeline ID for bulk delete (appended to list)
+Then('I store the created pipeline ID as pipeline {int}', async function (this: ICustomWorld, index: number) {
+  const pipelineId = this.responseBody?.data?.pipelineId;
+  expect(pipelineId, 'Expected pipelineId in response data').to.not.be.undefined;
+  if (!sharedState['bulkPipelineIds']) sharedState['bulkPipelineIds'] = [];
+  sharedState['bulkPipelineIds'][index - 1] = pipelineId;
+  logger.info(`Stored pipeline ${index} ID for bulk deletion: ${pipelineId}`);
+});
+
+// Bulk delete all pipelines stored in sharedState['bulkPipelineIds']
+When('I bulk delete all pipelines created in previous scenarios', async function (this: ICustomWorld) {
+  try {
+    const pipelineIds: string[] = sharedState['bulkPipelineIds'] || [];
+    expect(pipelineIds.length, 'No pipeline IDs stored for bulk delete').to.be.greaterThan(0);
+
+    const deletePayload = {
+      action: 'delete',
+      type: 'pipeline',
+      version: '1',
+      target: pipelineIds
+    };
+
+    logger.info(`Bulk deleting pipelines: ${pipelineIds.join(', ')}`);
+    const response = await this.request.post('/api/v2/actions', { data: deletePayload });
+    this.setResponse({ status: response.status() });
+    this.setResponseBody(await response.json().catch(() => ({})));
+    logger.info(`Bulk delete response status: ${response.status()}`);
+    // Clear after delete
+    sharedState['bulkPipelineIds'] = [];
+  } catch (error: any) {
+    logger.error(`Bulk pipeline delete failed: ${error.message}`);
+    this.setResponse({ status: error.status || 500 });
+    this.setResponseBody({});
+  }
+});
+
+// Delete using the pipeline ID stored in shared state from the create scenario
+When('I delete the pipeline created in the previous scenario', async function (this: ICustomWorld) {
+  try {
+    const pipelineId = sharedState['createdPipelineId'];
+    expect(pipelineId, 'No pipeline ID stored — run the create scenario first').to.not.be.undefined;
+
+    const deletePayload = {
+      action: 'delete',
+      type: 'pipeline',
+      version: '1',
+      target: [pipelineId]
+    };
+
+    logger.info(`Deleting pipeline with ID: ${pipelineId}`);
+    const response = await this.request.post('/api/v2/actions', { data: deletePayload });
+    this.setResponse({ status: response.status() });
+    this.setResponseBody(await response.json().catch(() => ({})));
+    logger.info(`Delete response status: ${response.status()}`);
+  } catch (error: any) {
+    logger.error(`Pipeline delete failed: ${error.message}`);
+    this.setResponse({ status: error.status || 500 });
+    this.setResponseBody({});
+  }
+});
+
+// =====================================================
 // Store created group name for deletion
 Then('I store the created group name', async function (this: ICustomWorld) {
   // The POST request already replaced ${timestamp} with Date.now()
@@ -357,7 +508,8 @@ When('I send a GET request to {string} without authentication', async function (
         'Accept': 'application/json',
         'Content-Type': 'application/json'
         // No Authorization header and no X-Customer-ID header
-      }
+      },
+      ignoreHTTPSErrors: true, // Ignore SSL certificate errors for testing
     });
     const response = await noAuthContext.get(endpoint);
     this.setResponse({ status: response.status() });
@@ -1099,4 +1251,244 @@ Then('the pipeline should be stopped successfully', async function (this: ICusto
 
 Then('the pipeline configuration should be updated', async function (this: ICustomWorld) {
   expect(this.response.status).to.equal(200);
+});
+
+// =====================================================
+// TASK BULK DELETE STEPS
+// =====================================================
+
+// Task create body (SCM Migration / GIT_TO_GIT) — reusable config
+const TASK_CREATE_BODY = (name: string) => ({
+  action: 'create',
+  type: 'task',
+  version: '1',
+  category: 'scm_migration',
+  settings: {
+    name,
+    configuration: {
+      migrationType: 'GIT_TO_GIT',
+      sourceScmType: 'github',
+      sourceGitToolId: '67a5de17fe54ef0012d01e2a',
+      targetScmType: 'github',
+      targetGitToolId: '67a5de17fe54ef0012d01e2a'
+    }
+  }
+});
+
+// Store the task ID from single-create response (newTaskId field)
+Then('I store the created task ID', async function (this: ICustomWorld) {
+  const taskId = this.responseBody?.newTaskId;
+  expect(taskId, 'Expected newTaskId in response body').to.not.be.undefined;
+  sharedState['createdTaskId'] = taskId;
+  logger.info(`Stored created task ID for deletion: ${taskId}`);
+});
+
+// Delete the single task stored in sharedState
+// Sends: POST /api/v2/actions → { action: "delete", type: "task", version: 1, target: [taskId] }
+When('I delete the task created in the previous scenario', async function (this: ICustomWorld) {
+  try {
+    const taskId = sharedState['createdTaskId'];
+    expect(taskId, 'No task ID stored — run the create scenario first').to.not.be.undefined;
+
+    const deletePayload = {
+      action: 'delete',
+      type: 'task',
+      version: 1,
+      target: [taskId]
+    };
+
+    logger.info(`Deleting task with ID: ${taskId}`);
+    const response = await this.request.post('/api/v2/actions', { data: deletePayload });
+    this.setResponse({ status: response.status() });
+    this.setResponseBody(await response.json().catch(() => ({})));
+    logger.info(`Task delete response status: ${response.status()}`);
+  } catch (error: any) {
+    logger.error(`Task delete failed: ${error.message}`);
+    this.setResponse({ status: error.status || 500 });
+    this.setResponseBody({});
+  }
+});
+
+// Create N tasks consecutively and store all IDs
+When('I create {int} tasks with base name {string}', async function (this: ICustomWorld, count: number, baseName: string) {
+  sharedState['bulkTaskIds'] = [];
+  for (let i = 1; i <= count; i++) {
+    const taskName = `${baseName}-${i}`;
+    const createPayload = TASK_CREATE_BODY(taskName);
+
+    const response = await this.request.post('/api/v2/actions', { data: createPayload });
+    const body = await response.json().catch(() => ({}));
+    const taskId = body?.newTaskId;
+
+    if (response.status() === 200 && taskId) {
+      sharedState['bulkTaskIds'].push(taskId);
+      logger.info(`✅ Created task ${i}/${count}: "${taskName}" → ID: ${taskId}`);
+    } else {
+      throw new Error(`Failed to create task "${taskName}" — status ${response.status()}: ${JSON.stringify(body)}`);
+    }
+  }
+  logger.info(`✅ All ${count} tasks created. IDs: ${sharedState['bulkTaskIds'].join(', ')}`);
+});
+
+// Validate N task IDs are stored
+Then('{int} task IDs should be stored for bulk deletion', async function (this: ICustomWorld, expectedCount: number) {
+  const ids: string[] = sharedState['bulkTaskIds'] || [];
+  expect(ids.length, `Expected ${expectedCount} task IDs stored but found ${ids.length}`).to.equal(expectedCount);
+  logger.info(`✅ Verified ${ids.length} task IDs stored: ${ids.join(', ')}`);
+});
+
+// Bulk delete all tasks stored in sharedState['bulkTaskIds']
+When('I bulk delete all tasks created in previous scenarios', async function (this: ICustomWorld) {
+  try {
+    const taskIds: string[] = sharedState['bulkTaskIds'] || [];
+    expect(taskIds.length, 'No task IDs stored for bulk delete').to.be.greaterThan(0);
+
+    const deletePayload = {
+      action: 'delete',
+      type: 'task',
+      version: 1,
+      target: taskIds
+    };
+
+    logger.info(`Bulk deleting tasks: ${taskIds.join(', ')}`);
+    const response = await this.request.post('/api/v2/actions', { data: deletePayload });
+    this.setResponse({ status: response.status() });
+    this.setResponseBody(await response.json().catch(() => ({})));
+    logger.info(`Bulk task delete response status: ${response.status()}`);
+    // Clear after delete
+    sharedState['bulkTaskIds'] = [];
+  } catch (error: any) {
+    logger.error(`Bulk task delete failed: ${error.message}`);
+    this.setResponse({ status: error.status || 500 });
+    this.setResponseBody({});
+  }
+});
+
+// =====================================================
+// TOOL BULK DELETE STEPS
+// =====================================================
+
+// Store the tool ID from create response (_id field)
+Then('I store the created tool ID', async function (this: ICustomWorld) {
+  const toolId = this.responseBody?._id;
+  expect(toolId, 'Expected _id in response body').to.not.be.undefined;
+  sharedState['createdToolId'] = toolId;
+  logger.info(`Stored created tool ID for deletion: ${toolId}`);
+});
+
+// Delete the single tool stored in sharedState
+// Sends: POST /api/v2/actions → { action: "delete", type: "tool", version: 1, target: [toolId] }
+When('I delete the tool created in the previous scenario', async function (this: ICustomWorld) {
+  try {
+    const toolId = sharedState['createdToolId'];
+    expect(toolId, 'No tool ID stored — run the create scenario first').to.not.be.undefined;
+
+    const deletePayload = {
+      action: 'delete',
+      type: 'tool',
+      version: 1,
+      target: [toolId]
+    };
+
+    logger.info(`Deleting tool with ID: ${toolId}`);
+    const response = await this.request.post('/api/v2/actions', { data: deletePayload });
+    this.setResponse({ status: response.status() });
+    this.setResponseBody(await response.json().catch(() => ({})));
+    logger.info(`Tool delete response status: ${response.status()}`);
+  } catch (error: any) {
+    logger.error(`Tool delete failed: ${error.message}`);
+    this.setResponse({ status: error.status || 500 });
+    this.setResponseBody({});
+  }
+});
+
+// Create N tools consecutively and store all IDs
+When('I create {int} tools with base name {string}', async function (this: ICustomWorld, count: number, baseName: string) {
+  sharedState['bulkToolIds'] = [];
+  for (let i = 1; i <= count; i++) {
+    const toolName = `${baseName}-${i}`;
+    const createPayload = {
+      name: toolName,
+      tool_identifier: 'github',
+      tool_type_identifier: 'source',
+      account: process.env.CUSTOMER_ID || '67caf6137242d37590c9f060',
+      description: `Tool ${i} created for bulk delete testing`
+    };
+
+    const response = await this.request.post('/api/v1/registry/create', { data: createPayload });
+    const body = await response.json().catch(() => ({}));
+    const toolId = body?._id;
+
+    if (response.status() === 200 && toolId) {
+      sharedState['bulkToolIds'].push(toolId);
+      logger.info(`✅ Created tool ${i}/${count}: "${toolName}" → ID: ${toolId}`);
+    } else {
+      throw new Error(`Failed to create tool "${toolName}" — status ${response.status()}: ${JSON.stringify(body)}`);
+    }
+  }
+  logger.info(`✅ All ${count} tools created. IDs: ${sharedState['bulkToolIds'].join(', ')}`);
+});
+
+// Validate N tool IDs are stored
+Then('{int} tool IDs should be stored for bulk deletion', async function (this: ICustomWorld, expectedCount: number) {
+  const ids: string[] = sharedState['bulkToolIds'] || [];
+  expect(ids.length, `Expected ${expectedCount} tool IDs stored but found ${ids.length}`).to.equal(expectedCount);
+  logger.info(`✅ Verified ${ids.length} tool IDs stored: ${ids.join(', ')}`);
+});
+
+// Bulk delete all tools stored in sharedState['bulkToolIds']
+When('I bulk delete all tools created in previous scenarios', async function (this: ICustomWorld) {
+  try {
+    const toolIds: string[] = sharedState['bulkToolIds'] || [];
+    expect(toolIds.length, 'No tool IDs stored for bulk delete').to.be.greaterThan(0);
+
+    const deletePayload = {
+      action: 'delete',
+      type: 'tool',
+      version: 1,
+      target: toolIds
+    };
+
+    logger.info(`Bulk deleting tools: ${toolIds.join(', ')}`);
+    const response = await this.request.post('/api/v2/actions', { data: deletePayload });
+    this.setResponse({ status: response.status() });
+    this.setResponseBody(await response.json().catch(() => ({})));
+    logger.info(`Bulk tool delete response status: ${response.status()}`);
+    sharedState['bulkToolIds'] = [];
+  } catch (error: any) {
+    logger.error(`Bulk tool delete failed: ${error.message}`);
+    this.setResponse({ status: error.status || 500 });
+    this.setResponseBody({});
+  }
+});
+
+// =====================================================
+// SLOW ENDPOINT STEPS - For endpoints that take 60+ seconds
+// =====================================================
+
+/**
+ * Step for retrieving all users with extended timeout
+ * This endpoint can take 55-60+ seconds to respond
+ */
+When('I send a GET request to {string} with extended timeout', async function (this: ICustomWorld, endpoint: string) {
+  try {
+    logger.info(`Sending GET request with extended timeout (120s) to: ${endpoint}`);
+    
+    // Create a request with extended timeout (120 seconds)
+    const response = await this.request.get(endpoint, {
+      timeout: 120000 // 120 seconds
+    });
+    
+    logger.info(`Response URL: ${response.url()}`);
+    logger.info(`Response status: ${response.status()}`);
+    logger.info(`Response status text: ${response.statusText()}`);
+    
+    this.setResponse({ status: response.status() });
+    this.setResponseBody(await response.json().catch(() => ({})));
+    logger.info(`GET request with extended timeout completed with status: ${response.status()}`);
+  } catch (error: any) {
+    logger.error(`GET request with extended timeout failed: ${error.message}`);
+    this.setResponse({ status: error.status || 500 });
+    this.setResponseBody({});
+  }
 });

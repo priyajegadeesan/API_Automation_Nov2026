@@ -7,7 +7,7 @@ Feature: SCIM Get Group
     Given the API is available
     And I am authenticated with valid SCIM credentials
 
-  @smoke @scim @groups @get @uat
+  @UAT-USER @smoke @scim @groups @UAT-USER @get @UAT-USER @uat
   Scenario: Get SCIM group by ID
     When I send a GET request to "/api/v2/scim/v2/groups/6a18721a4557a4c76f9452ce"
     Then the response status code should be 200

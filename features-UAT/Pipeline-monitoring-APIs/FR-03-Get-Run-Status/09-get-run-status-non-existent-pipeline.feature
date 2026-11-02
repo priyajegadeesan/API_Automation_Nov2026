@@ -4,9 +4,9 @@ Feature: Get Run Status for Non-existent Pipeline
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @pipeline @run @status @negative @prod
+  @UAT-USER @pipeline @run @status @UAT-USER @negative @UAT-USER @prod
   Scenario: Get run status for non-existent pipeline with valid ObjectId
     When I send a GET request to "/api/v2/pipelines/507f1f77bcf86cd799439011/runs/1/status"
     Then the response status code should be 404

@@ -5,9 +5,9 @@ Feature: Get Task By ID No Lookup
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @tasks @prod @nolookup
+  @UAT-USER @smoke @tasks @UAT-USER @prod @UAT-USER @nolookup
   Scenario: Get task by ID without lookup
     Given I have a valid task ID "6838419bb017a1f73f62840a"
     When I send a POST request to "/api/v2/tasks" with body:

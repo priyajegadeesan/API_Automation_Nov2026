@@ -13,6 +13,12 @@ logs/
 .env.prod
 .env.test
 
+# SECURITY: Never commit environment backup files
+.env*.backup
+.env.uat.backup
+.env.prod.backup
+.env.test.backup
+
 # Keep only template files
 # .env.example (committed - no real credentials)
 # .env.uat.template (committed - placeholders only)

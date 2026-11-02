@@ -5,9 +5,9 @@ Feature: Create Global Encrypted Parameter
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @parameters @create @encrypted @uat
+  @UAT-USER @smoke @parameters @create @UAT-USER @encrypted @UAT-USER @uat
   Scenario: Create encrypted parameter successfully
     # Note: The parameter name must be unique. The step auto-generates a unique name with timestamp.
     When I send a POST request to create global encrypted parameter

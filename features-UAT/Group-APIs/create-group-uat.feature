@@ -5,9 +5,9 @@ Feature: Create Group UAT
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @groups @create @uat @post
+  @UAT-USER @smoke @groups @create @UAT-USER @uat @UAT-USER @post
   Scenario: Create a new group successfully in UAT
     When I send a POST request to "/api/v2/usermanagement/group" with body:
       """

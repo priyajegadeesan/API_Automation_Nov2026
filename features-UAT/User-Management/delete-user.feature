@@ -5,9 +5,9 @@ Feature: Delete User
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @user @delete @uat @cleanup
+  @UAT-USER @user @delete @UAT-USER @uat @UAT-USER @cleanup
   Scenario: Create a user and then delete it
     # First create the user
     When I send a POST request to "/api/v2/usermanagement/user" with user details

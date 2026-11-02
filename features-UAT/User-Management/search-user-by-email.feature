@@ -4,9 +4,9 @@ Feature: Search User by Email
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @user @search @email @uat @get
+  @UAT-USER @user @search @email @UAT-USER @uat @UAT-USER @get
   Scenario: Search user by email successfully
     When I send a GET request to "/api/v2/usermanagement/user?search=email=qaguest_uat@opsera.us"
     Then the response status code should be 200

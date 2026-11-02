@@ -4,9 +4,9 @@ Feature: UAT v2 Run Pipeline
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @pipeline @run @uat
+  @UAT-USER @pipeline @UAT-USER @run @UAT-USER @uat
   Scenario: Run a pipeline in UAT
     When I send a POST request to "/api/v2/actions" with run action
     Then the response status code should be 200

@@ -33,6 +33,38 @@ Given('I am authenticated with valid TEST credentials', async function (this: IC
   expect(this.request).to.not.be.undefined;
 });
 
+Given('I am authenticated with RBAC user token', async function (this: ICustomWorld) {
+  // Re-initialize request context with RBAC user token
+  const { config } = await import('../config/config');
+  const { request } = await import('@playwright/test');
+  
+  logger.info('Initializing API Request Context with RBAC User Token');
+  logger.info(`Base URL: ${config.baseURL}`);
+  logger.info(`Customer ID: ${config.customerID}`);
+  logger.info(`RBAC User Token: ${config.rbacUserToken ? 'Present' : 'Missing'}`);
+  
+  // Dispose existing context if any
+  if (this.request) {
+    await this.request.dispose();
+  }
+  
+  // Create new context with RBAC user token
+  this.request = await request.newContext({
+    baseURL: config.baseURL,
+    extraHTTPHeaders: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      ...(config.customerID && { 'X-Customer-ID': config.customerID }),
+      ...(config.rbacUserToken && { 'Authorization': `Bearer ${config.rbacUserToken}` }),
+    },
+    timeout: config.apiTimeout,
+    ignoreHTTPSErrors: true, // Ignore SSL certificate errors for testing
+  });
+  
+  expect(this.request).to.not.be.undefined;
+  logger.info('RBAC user token authentication initialized successfully');
+});
+
 // =====================================================
 // DATA SETUP STEPS
 // =====================================================
@@ -43,10 +75,6 @@ Given('I have a valid group ID', async function (this: ICustomWorld) {
 
 Given('I have an existing group ID', async function (this: ICustomWorld) {
   this.testData.set('groupId', '507f1f77bcf86cd799439011');
-});
-
-Given('I have a valid parameter ID', async function (this: ICustomWorld) {
-  this.testData.set('parameterId', '507f1f77bcf86cd799439011');
 });
 
 Given('I have an existing encrypted parameter ID', async function (this: ICustomWorld) {
@@ -443,6 +471,15 @@ Then('the response should contain user details', async function (this: ICustomWo
 Then('the response should have property {string}', async function (this: ICustomWorld, property: string) {
   expect(this.responseBody).to.have.property(property);
   logger.info(`Verified response has property: ${property}`);
+});
+
+Then('the response body should contain {string}', async function (this: ICustomWorld, expectedContent: string) {
+  expect(this.response).to.not.be.null;
+  expect(this.responseBody).to.not.be.null;
+  
+  const responseBodyString = JSON.stringify(this.responseBody);
+  expect(responseBodyString).to.include(expectedContent);
+  logger.info(`Verified response body contains: ${expectedContent}`);
 });
 
 Then('the user ID should match {string}', async function (this: ICustomWorld, userId: string) {

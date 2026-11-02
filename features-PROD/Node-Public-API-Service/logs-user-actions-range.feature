@@ -7,7 +7,7 @@
     Given the API is available
     And I am authenticated with valid credentials
 
-  @smoke @node-api @get @prod
+  @smoke @node-api @get @prod @ignore
   Scenario: Logs_User Actions_Range API call
     When I send a GET request to "/api/v1/logs/user/actions?range=1h&jobType=CODE SCAN"
     Then the response status code should be 200

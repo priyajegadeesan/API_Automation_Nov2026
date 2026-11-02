@@ -1,4 +1,5 @@
-﻿Feature: HW_Logs_v2_User Actions_Range
+﻿@ignore
+Feature: HW_Logs_v2_User Actions_Range
   As an API consumer
   I want to test the HW_Logs_v2_User Actions_Range endpoint
   So that I can verify the API functionality

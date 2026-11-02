@@ -5,9 +5,9 @@ Feature: Get All Parameters (encrypted only)
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @parameters @get @encrypted @uat
+  @UAT-USER @smoke @parameters @get @UAT-USER @encrypted @UAT-USER @uat
   Scenario: Get all encrypted parameters successfully
     When I send a GET request to "/api/v2/global-parameters/?encrypted=true"
     Then the response status code should be 200

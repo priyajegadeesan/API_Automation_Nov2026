@@ -1,4 +1,4 @@
-@uat @onboarding-reports @get @error-case
+@UAT-USER @uat @onboarding-reports @get @error-case
 Feature: Invalid period
   As an API user
   I want to test invalid period
@@ -6,7 +6,7 @@ Feature: Invalid period
 
   Scenario: Invalid period
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
     When I send a GET request to "/api/v2/reports/pipelines/created?period=last_45days"
     Then the response status code should be 400
     And the response should be a valid JSON

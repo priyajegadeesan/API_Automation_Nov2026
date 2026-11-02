@@ -7,7 +7,7 @@ Feature: SCIM Create New User
     Given the API is available
     And I am authenticated with valid SCIM credentials
 
-  @smoke @scim @users @create @uat @post
+  @UAT-USER @smoke @scim @users @UAT-USER @create @UAT-USER @uat @UAT-USER @post
   Scenario: Create new SCIM user successfully
     When I send a POST request to "/api/v2/scim/v2/users" with body:
       """

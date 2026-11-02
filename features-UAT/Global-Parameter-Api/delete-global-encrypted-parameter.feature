@@ -5,9 +5,9 @@ Feature: Delete Global Encrypted Parameter
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @parameters @delete @encrypted @uat
+  @UAT-USER @parameters @delete @UAT-USER @encrypted @UAT-USER @uat
   Scenario: Delete encrypted parameter successfully
     When I send a DELETE request to "/api/v2/global-parameters/698040f298ef6ff3e44d225e"
     Then the response status code should be 200

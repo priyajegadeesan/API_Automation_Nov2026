@@ -7,7 +7,7 @@ Feature: SCIM Get User By ID
     Given the API is available
     And I am authenticated with valid SCIM credentials
 
-  @smoke @scim @users @get @uat
+  @UAT-USER @smoke @scim @users @UAT-USER @get @UAT-USER @uat
   Scenario: Get SCIM user by ID
     When I send a GET request to "/api/v2/scim/v2/users/69aab692b086af128ca8e1ce"
     Then the response status code should be 200

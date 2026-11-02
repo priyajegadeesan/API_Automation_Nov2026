@@ -1,4 +1,4 @@
-@uat @onboarding-reports @get
+@UAT-USER @uat @onboarding-reports @get
 Feature: Custom date range- grouped by type
   As an API user
   I want to retrieve custom date range pipelines grouped by type
@@ -6,7 +6,7 @@ Feature: Custom date range- grouped by type
 
   Scenario: Custom date range- grouped by type
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
     When I send a GET request to "/api/v2/reports/pipelines/created?start_date=2025-10-01&end_date=2025-12-15&group_by=type"
     Then the response status code should be 200
     And the response should be a valid JSON

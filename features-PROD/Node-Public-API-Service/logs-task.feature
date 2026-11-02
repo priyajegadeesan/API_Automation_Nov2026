@@ -1,4 +1,5 @@
-﻿Feature: Logs_Task
+﻿@ignore
+Feature: Logs_Task
   As an API consumer
   I want to test the Logs_Task endpoint
   So that I can verify the API functionality

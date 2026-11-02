@@ -5,9 +5,9 @@ Feature: Get All Global Parameters
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @parameters @get @uat
+  @UAT-USER @smoke @parameters @UAT-USER @get @UAT-USER @uat
   Scenario: Get all global parameters successfully
     When I send a GET request to "/api/v2/global-parameters/"
     Then the response status code should be 200

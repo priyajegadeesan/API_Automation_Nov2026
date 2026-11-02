@@ -9,7 +9,7 @@ Feature: Delete Group PROD
 
   @groups @delete @prod
   Scenario: Delete an existing group successfully
-    Given I have an existing group ID
-    When I send a DELETE request to "/api/v2/usermanagement/group/{id}"
+    Given I have an existing group ID "697354de1ac25f58b399f521"
+    When I send a DELETE request to "/api/v2/usermanagement/group/qa_20251225_61977822"
     Then the response status code should be 200
     And the group should be deleted successfully

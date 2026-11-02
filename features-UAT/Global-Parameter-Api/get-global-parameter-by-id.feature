@@ -5,9 +5,9 @@ Feature: Get Global Parameter By ID
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @parameters @get @id @prod
+  @UAT-USER @smoke @parameters @get @UAT-USER @id @UAT-USER @prod
   Scenario: Get parameter by ID successfully
     When I send a GET request to "/api/v2/global-parameters/692f09ba3819720ffa8571ae"
     Then the response status code should be 200

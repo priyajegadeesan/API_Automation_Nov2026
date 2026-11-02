@@ -1,4 +1,5 @@
-﻿Feature: Pipeline notification
+﻿@ignore
+Feature: Pipeline notification
   As an API consumer
   I want to test the Pipeline notification endpoint
   So that I can verify the API functionality

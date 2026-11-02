@@ -5,9 +5,9 @@ Feature: Delete Global nonencrypted Parameter
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @parameters @delete @nonencrypted @uat
+  @UAT-USER @smoke @parameters @delete @UAT-USER @nonencrypted @UAT-USER @uat
   Scenario: Delete non-encrypted parameter successfully
     When I send a DELETE request to "/api/v2/global-parameters/6980401698ef6ff3e44d222c"
     Then the response status code should be 200

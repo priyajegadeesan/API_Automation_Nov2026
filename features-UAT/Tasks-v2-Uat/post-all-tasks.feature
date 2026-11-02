@@ -5,9 +5,9 @@ Feature: Post All Tasks
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @smoke @tasks @uat @post
+  @UAT-USER @smoke @tasks @UAT-USER @uat @UAT-USER @post
   Scenario: Post all tasks by pipeline ID
     Given I have a valid pipeline ID "66a920e1bf9a9e002f9a36db"
     When I send a POST request to "/api/v2/tasks" with body:

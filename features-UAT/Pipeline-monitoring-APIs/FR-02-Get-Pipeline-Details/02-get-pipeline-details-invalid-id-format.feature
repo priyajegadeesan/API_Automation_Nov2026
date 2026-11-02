@@ -4,9 +4,9 @@ Feature: Get Pipeline Details with Invalid ID Format
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @pipeline @details @negative @uat
+  @UAT-USER @pipeline @details @UAT-USER @negative @UAT-USER @uat
   Scenario: Get pipeline details with invalid ID format
     When I send a GET request to "/api/v2/pipelines/{pipelineId}" with invalid ID format
     Then the response status code should be 400

@@ -4,9 +4,9 @@ Feature: Get Pipeline Details with Valid ID
 
   Background:
     Given the API is available
-    And I am authenticated with valid credentials
+    And I am authenticated with RBAC user token
 
-  @pipeline @details @uat @get
+  @UAT-USER @pipeline @details @UAT-USER @uat @UAT-USER @get
   Scenario: Get pipeline details with valid pipeline ID
     When I send a GET request to "/api/v2/pipelines/6a1410b4e70b93d416d27074"
     Then the response status code should be 200

@@ -7,12 +7,11 @@ Feature: v2 Task Logs
   Scenario: Successfully retrieve task logs with task ID
     Given the API is available
     And I am authenticated with valid credentials
-    And I have the following request body:
+    When I send a POST request to "/api/v2/logs/task" with body:
       """
       {
-        "id": "6838419bb017a1f73f62840a"
+        "id": "67c2ae58082f750012c29036"
       }
       """
-    When I send a POST request to "/api/v2/logs/task"
     Then the response status code should be 200
     And the response should be a valid JSON

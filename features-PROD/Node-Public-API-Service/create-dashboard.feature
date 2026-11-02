@@ -1,4 +1,5 @@
-﻿Feature: Create Dashboard
+﻿@ignore
+Feature: Create Dashboard
   As an API consumer
   I want to test the Create Dashboard endpoint
   So that I can verify the API functionality

@@ -9,7 +9,7 @@ Feature: SCIM Update User
 
   @scim @users @update @uat @patch
   Scenario: Update SCIM user successfully
-    When I send a PATCH request to "/api/v2/scim/v2/users/681dfba1b3474278d2a96d61" with body:
+    When I send a PATCH request to "/api/v2/scim/v2/users/6a998e9f36dbe98a635ab25b" with body:
       """
       {
         "schemas": [

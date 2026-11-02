@@ -7,7 +7,7 @@ Feature: SCIM Patch User
     Given the API is available
     And I am authenticated with valid SCIM credentials
 
-  @scim @users @patch @uat
+  @UAT-USER @scim @users @UAT-USER @patch @UAT-USER @uat
   Scenario: Patch SCIM user with operations
     When I send a PATCH request to "/api/v2/scim/v2/users/61ab3a605feaee00118c4024" with body:
       """

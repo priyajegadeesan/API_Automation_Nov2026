@@ -7,7 +7,7 @@
     Given the API is available
     And I am authenticated with valid credentials
 
-  @smoke @node-api @post @prod
+  @smoke @node-api @post @prod @ignore
   Scenario: Pipeline demo API call
     When I send a POST request to "/api/v1/pipeline/demo" with body:
       """

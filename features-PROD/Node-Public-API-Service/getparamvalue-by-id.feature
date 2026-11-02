@@ -9,6 +9,6 @@
 
   @smoke @node-api @get
   Scenario: GetParamValue by ID API call
-    When I send a GET request to "/api/v2/parameters/67ab362671c8840012f20788/value"
+    When I send a GET request to "/api/v2/parameters/699eb94b44b730fb74c3a434/value"
     Then the response status code should be 200
     And the response should be valid
