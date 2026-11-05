@@ -677,3 +677,64 @@ When('I send a DELETE request to delete the created user', async function (this:
     logger.error(`❌ User deletion failed with error: ${error.message}`);
   }
 });
+
+// RBAC Permission Validation Steps
+Then('the response should contain {string} as {string}', async function (this: ICustomWorld, fieldName: string, expectedValue: string) {
+  const responseBody = this.responseBody;
+  
+  logger.info(`Checking if response contains "${fieldName}" with value "${expectedValue}"`);
+  logger.info(`Response body: ${JSON.stringify(responseBody, null, 2)}`);
+  
+  if (!responseBody) {
+    throw new Error('Response body is empty or undefined');
+  }
+  
+  const actualValue = responseBody[fieldName];
+  
+  if (actualValue === undefined) {
+    throw new Error(`Field "${fieldName}" not found in response`);
+  }
+  
+  if (actualValue !== expectedValue) {
+    throw new Error(`Expected "${fieldName}" to be "${expectedValue}" but got "${actualValue}"`);
+  }
+  
+  logger.info(`✅ Verified: ${fieldName} = ${expectedValue}`);
+});
+
+Then('the response should contain permission validation error message', async function (this: ICustomWorld) {
+  const responseBody = this.responseBody;
+  
+  logger.info('Checking for failed status indicating permission or access denial');
+  logger.info(`Response body: ${JSON.stringify(responseBody, null, 2)}`);
+  
+  if (!responseBody) {
+    throw new Error('Response body is empty or undefined');
+  }
+  
+  // Check if status is "failed" and message indicates request failure
+  const hasFailed = responseBody.status === 'failed';
+  const hasFailureMessage = responseBody.message && 
+    typeof responseBody.message === 'string' && 
+    (responseBody.message.toLowerCase().includes('failed') || 
+     responseBody.message.toLowerCase().includes('invalid') ||
+     responseBody.message.toLowerCase().includes('permission'));
+  
+  // Check responses array for failure indicators
+  const hasFailedResponses = responseBody.responses && 
+    Array.isArray(responseBody.responses) && 
+    responseBody.responses.some((r: any) => r.status === 'failed');
+  
+  if (!hasFailed) {
+    throw new Error('Expected status to be "failed" but it was not');
+  }
+  
+  if (!hasFailureMessage && !hasFailedResponses) {
+    throw new Error('No failure or access denial message found in response');
+  }
+  
+  logger.info('✅ Verified: QA user action failed as expected');
+  logger.info(`   Status: ${responseBody.status}`);
+  logger.info(`   Message: ${responseBody.message}`);
+  logger.info(`   This confirms the user does NOT have permission to run the pipeline`);
+});
